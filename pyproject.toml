@@ -10,6 +10,7 @@ packages = [{include = "test_work_larixon"}]
 python = "^3.10"
 django = "^4.2.5"
 djangorestframework = "^3.14.0"
+uwsgi = "^2.0.22"
 
 
 [build-system]

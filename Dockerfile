@@ -27,6 +27,7 @@ RUN apt-get -y update \
     && curl -sSL https://install.python-poetry.org | python3 -
 
 COPY poetry.lock pyproject.toml ./
+COPY django_application/ ./django_application/
 
 RUN poetry install -n --no-root --no-dev
 
@@ -37,20 +38,15 @@ RUN poetry install -n --no-root
 
 FROM base as app-base
 
-ENV PORT=8001 \
+ENV PORT=8000 \
     STATIC_ROOT=/static \
     MEDIA_ROOT=/media/public \
     PRIVATE_MEDIA_ROOT=/media/private
-# 8001 - uwsgi, 8003-8009 - prometheus
-EXPOSE 8001 8002 8003 8004 8005 8006 8007 8008
+EXPOSE 8000 8002 8003 8004 8005 8006 8007 8008
 
 WORKDIR $APPLICATION_PATH
 
-RUN mkdir -p $STATIC_ROOT $MEDIA_ROOT $PRIVATE_MEDIA_ROOT
-RUN mkdir -p $MEDIA_ROOT/logs/applications/actions $MEDIA_ROOT/logs/applications/history
-RUN mkdir -p $MEDIA_ROOT/logs/step_executions/actions $MEDIA_ROOT/logs/step_executions/history
-RUN mkdir -p $MEDIA_ROOT/logs/block_executions/history
-
+COPY django_application/ ./django_application/
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
@@ -68,10 +64,5 @@ ENV DEVELOPMENT=true
 COPY --from=dev-builder $POETRY_HOME $POETRY_HOME
 COPY --from=dev-builder $VENV_PATH $VENV_PATH
 
-COPY pyproject.toml poetry.lock ./
-
-COPY django_application/ ./django_application/
-
-RUN poetry install -n
 
 CMD ["./docker-entrypoint.sh"]
