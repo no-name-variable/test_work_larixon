@@ -1,0 +1,16 @@
+version: "3.9"
+
+x-base: &base-market
+  image: market
+  build:
+    context: .
+    target: development
+
+services:
+  django-server:
+    <<: *base-market
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./src:/usr/app/src
+      - ./media:/media

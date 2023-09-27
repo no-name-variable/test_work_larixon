@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "test-work-larixon"
+version = "0.1.0"
+description = ""
+authors = ["yotamvladgmail.com <yotamvlad@gmail.com>"]
+readme = "README.md"
+packages = [{include = "test_work_larixon"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.2.5"
+djangorestframework = "^3.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
